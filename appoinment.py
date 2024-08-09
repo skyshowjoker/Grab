@@ -1,15 +1,10 @@
 import datetime
-import json
+import random
 import re
-import urllib.parse
-import threading
+import time
 
 import requests
 import urllib3
-import yaml
-import time
-import random
-
 from tqdm import tqdm
 
 from citi_login import USTCPassportLogin

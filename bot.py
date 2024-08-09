@@ -1,7 +1,5 @@
 from appoinment import USTCGymAppointment
 
-from apscheduler.schedulers.background import BackgroundScheduler
-import time
 
 def my_task():
 
