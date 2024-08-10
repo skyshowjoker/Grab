@@ -2,6 +2,8 @@ import datetime
 import random
 import re
 import time
+from socket import socket
+from typing import Union
 
 import requests
 import urllib3
@@ -85,11 +87,15 @@ class USTCGymAppointment(object):
             try:
                 devet_detail = self._get_event_detail(event_id)
             except TimeoutError:
+                time.sleep(random.uniform(30, 200))
                 print('time out')
             except urllib3.exceptions.MaxRetryError:
                 print('MaxRetryError')
             except requests.exceptions.ConnectTimeout:
                 print('MaxRetryError')
+            except requests.exceptions.RequestException:
+                print('RequestException')
+
             msg = devet_detail['message']
             print('第' + str(count) + '次轮询: ' + msg)
             count = count + 1
@@ -101,7 +107,7 @@ class USTCGymAppointment(object):
                     send_sms(self.phone_number, pattern + "报名成功")
                     return
             print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
-            time.sleep(random.uniform(5, 20))
+            time.sleep(random.uniform(15, 50))
 
     def test(self):
         self._login('17396245416')
