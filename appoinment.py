@@ -73,6 +73,8 @@ class USTCGymAppointment(object):
                 print('MaxRetryError')
             except requests.exceptions.ConnectTimeout:
                 print('ConnectTimeout')
+            except requests.exceptions.RequestException:
+                print('RequestException')
             if event_id != '':
                 send_sms(self.phone_number, pattern + '活动开始啦')
                 return event_id
