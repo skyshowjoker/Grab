@@ -108,7 +108,7 @@ class USTCGymAppointment(object):
                     print('报名成功')
                     send_sms(self.phone_number, pattern + "报名成功")
                     return
-            print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
+            print(BJ_now().strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
             time.sleep(random.uniform(15, 50))
 
     def test(self):
@@ -124,9 +124,17 @@ class USTCGymAppointment(object):
             print('报名成功')
 
 
+    def BJ_now(self):
+        utc_now = datetime.utcnow()
+
+        # 设置北京时区
+        beijing_tz = pytz.timezone('Asia/Shanghai')
+
+        # 将UTC时间转换为北京时间
+        beijing_time = utc_now.astimezone(beijing_tz)
+        return beijing_time
     def invalid_date(self, date_str):
-        # now_time = time.strftime('%Y-%m-%d %H:%M', time.localtime())
-        now_time = datetime.datetime.now()
+        now_time = BJ_now()
         format_date = datetime.datetime.strptime(date_str, '%Y-%m-%d %H:%M')
         return now_time < format_date
 
