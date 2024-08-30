@@ -2,8 +2,8 @@ import datetime
 import random
 import re
 import time
-from socket import socket
-from typing import Union
+import pytz
+
 
 import requests
 import urllib3
@@ -82,6 +82,15 @@ class USTCGymAppointment(object):
                 print('活动未开始。')
             time.sleep(random.uniform(1, 5))
 
+    def BJ_now(self):
+        utc_now = datetime.datetime.utcnow()
+
+        # 设置北京时区
+        beijing_tz = pytz.timezone('Asia/Shanghai')
+
+        # 将UTC时间转换为北京时间
+        beijing_time = utc_now.astimezone(beijing_tz)
+        return beijing_time
     def appointment(self, pattern):
         event_id = self.check_activity(pattern)
         count = 1;
@@ -108,7 +117,8 @@ class USTCGymAppointment(object):
                     print('报名成功')
                     send_sms(self.phone_number, pattern + "报名成功")
                     return
-            print(BJ_now().strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
+            now = self.BJ_now()
+            print(now.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
             time.sleep(random.uniform(15, 50))
 
     def test(self):
@@ -124,19 +134,15 @@ class USTCGymAppointment(object):
             print('报名成功')
 
 
-    def BJ_now(self):
-        utc_now = datetime.utcnow()
 
-        # 设置北京时区
+    def invalid_date(self, date_str):
+        now_time = self.BJ_now()
+        format_date = datetime.datetime.strptime(date_str, '%Y-%m-%d %H:%M')
         beijing_tz = pytz.timezone('Asia/Shanghai')
 
         # 将UTC时间转换为北京时间
-        beijing_time = utc_now.astimezone(beijing_tz)
-        return beijing_time
-    def invalid_date(self, date_str):
-        now_time = BJ_now()
-        format_date = datetime.datetime.strptime(date_str, '%Y-%m-%d %H:%M')
-        return now_time < format_date
+        target_time = format_date.astimezone(beijing_tz)
+        return now_time < target_time
 
 
     def str_match(self, str, pattern):
