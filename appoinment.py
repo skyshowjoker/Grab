@@ -117,8 +117,8 @@ class USTCGymAppointment(object):
                     print('报名成功')
                     send_sms(self.phone_number, pattern + "报名成功")
                     return
-            now = self.BJ_now()
-            print(now.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
+            bj_now = self.BJ_now()
+            print(bj_now.now().strftime('%Y-%m-%d %H:%M:%S'))
             time.sleep(random.uniform(15, 50))
 
     def test(self):
@@ -130,6 +130,8 @@ class USTCGymAppointment(object):
         }
         response = self.sess.post(self.join_cancel_url, payload, allow_redirects=False, timeout=5)
         print(response.json())
+        bj_now = self.BJ_now()
+        print(bj_now.now().strftime('%Y-%m-%d %H:%M:%S'))
         if (response.json()['message'] == '报名成功'):
             print('报名成功')
 
